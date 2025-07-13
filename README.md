@@ -23,11 +23,12 @@ Projekt przedstawia infrastrukturę sieciową firmy podzieloną na dwa piętra z
     - Obraz RouterOs Mikrotik v7.19.3 wgrany do folderu /opt/unetlab/addons/qemu/Mikrotik-7 a następnie użycie komendy /opt/unetlab/wrappers/unl_wrapper -a fixpermissions
     - Obraz serwera WWW z ustawionym statycznym adresem IP (zgodny z adresacją w tabeli)
     - Dostęp do maszyny przez wirtualny telnet (Adres IP maszyny + port przypisany do węzła; port widoczny po najechaniu na node w GUI)
+
   #Uruchomienie:
-    1)Plik z .unl należy zaimportować do maszyny eve-ng/pnetlab
-    2)Po otworzeniu projektu należy uruchomić wszystkie node
-    3)Po zalogowaniu się na każde urządzenie Wklej konfigurację z pliku .txt odpowiadającego danemu urządzeniu 
-    4)Na hostach VPC (lub innym systemie operacyjnym):
+    -Plik z .unl należy zaimportować do maszyny eve-ng/pnetlab
+    -Po otworzeniu projektu należy uruchomić wszystkie node
+    -Po zalogowaniu się na każde urządzenie Wklej konfigurację z pliku .txt odpowiadającego danemu urządzeniu 
+    -Na hostach VPC (lub innym systemie operacyjnym):
    	- Pobierz adres IP komendą: dhcp
    	- Sprawdź komunikację między VLAN-ami oraz dostęp do serwera WWW 
 
