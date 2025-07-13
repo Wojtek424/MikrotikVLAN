@@ -1,0 +1,88 @@
+/interface bridge
+add name=MANAGMENT_BRIDGE vlan-filtering=yes
+/interface ethernet
+set [ find default-name=ether1 ] disable-running-check=no
+set [ find default-name=ether2 ] disable-running-check=no
+set [ find default-name=ether3 ] disable-running-check=no
+set [ find default-name=ether4 ] disable-running-check=no
+/interface vlan
+add interface=ether2 name=DzialA vlan-id=10
+add interface=ether2 name=DzialB vlan-id=20
+add interface=ether2 name=DzialC vlan-id=30
+add interface=ether1 name=Internet vlan-id=100
+add interface=MANAGMENT_BRIDGE name=Managment vlan-id=90
+/interface vrrp
+add comment="Main Default Gateway for DzialA" interface=DzialA name=\
+    DzialAGateway vrid=10
+add comment="Main Default Gateway for DzialB" interface=DzialB name=\
+    DzialBGateway vrid=20
+add comment="Main Default Gateway for DzialC" interface=DzialC name=\
+    DzialCGateway vrid=30
+/ip pool
+add name=dhcp_pool0 ranges=192.168.10.10-192.168.10.50
+add name=dhcp_pool1 ranges=192.168.20.10-192.168.20.50
+add name=dhcp_pool2 ranges=192.168.30.10-192.168.30.50
+/ip dhcp-server
+add address-pool=dhcp_pool0 interface=DzialAGateway lease-time=1d name=dhcp1
+add address-pool=dhcp_pool1 interface=DzialBGateway lease-time=1d name=dhcp2
+add address-pool=dhcp_pool2 interface=DzialCGateway lease-time=1d name=dhcp3
+/port
+set 0 name=serial0
+set 1 name=serial1
+/interface bridge port
+add bridge=MANAGMENT_BRIDGE interface=ether1
+add bridge=MANAGMENT_BRIDGE interface=ether2
+/interface bridge vlan
+add bridge=MANAGMENT_BRIDGE tagged=ether1,ether2 vlan-ids=90
+/ip address
+add address=10.10.10.5/28 interface=Managment network=10.10.10.0
+add address=192.168.1.3/29 interface=Internet network=192.168.1.0
+add address=192.168.10.1/24 interface=DzialA network=192.168.10.0
+add address=192.168.20.1/24 interface=DzialB network=192.168.20.0
+add address=192.168.30.1/24 interface=DzialC network=192.168.30.0
+add address=192.168.10.200/24 interface=DzialAGateway network=192.168.10.0
+add address=192.168.20.200/24 interface=DzialBGateway network=192.168.20.0
+add address=192.168.30.200/24 interface=DzialCGateway network=192.168.30.0
+/ip dhcp-server network
+add address=192.168.10.0/24 dns-server=8.8.8.8 gateway=192.168.10.200
+add address=192.168.20.0/24 dns-server=8.8.8.8 gateway=192.168.20.200
+add address=192.168.30.0/24 dns-server=8.8.8.8 gateway=192.168.30.200
+/ip firewall filter
+add action=drop chain=forward comment="BLOCK VLAN 10 ACCESS TO VLAN 30" \
+    dst-address=192.168.30.0/24 in-interface=DzialAGateway
+add action=drop chain=forward comment="BLOCK VLAN 20 ACCESS TO VLAN 30" \
+    dst-address=192.168.30.0/24 in-interface=DzialBGateway
+add action=drop chain=forward comment="BLOCK VLAN 20 ACCESS TO VLAN 10" \
+    dst-address=192.168.10.0/24 in-interface=DzialBGateway
+add action=drop chain=forward comment="BLOCK VLAN 30 ACCESS TO VLAN 10" \
+    dst-address=192.168.30.0/24 in-interface=DzialCGateway
+add action=drop chain=forward comment="BLOCK VLAN 30 ACCESS TO VLAN 20" \
+    dst-address=192.168.20.0/24 in-interface=DzialCGateway
+add action=drop chain=forward comment="BLOCK VLAN 10 ACCESS TO VLAN 20" \
+    dst-address=192.168.20.0/24 in-interface=DzialAGateway
+add action=drop chain=input dst-address=10.10.10.5 in-interface=!Managment
+add action=drop chain=input comment="Block Vlan 20 ACCESS to vlan10 Gateway" \
+    dst-address=192.168.10.0/24 src-address=192.168.20.0/24
+add action=drop chain=input comment="Block Vlan 30 ACCESS to vlan10 Gateway" \
+    dst-address=192.168.10.0/24 src-address=192.168.30.0/24
+add action=drop chain=input comment="Block Vlan 30 ACCESS to vlan20 Gateway" \
+    dst-address=192.168.20.0/24 src-address=192.168.30.0/24
+add action=drop chain=input comment="Block Vlan 10 ACCESS to vlan20 Gateway" \
+    dst-address=192.168.20.0/24 src-address=192.168.10.0/24
+add action=drop chain=input comment="Block Vlan 10 ACCESS to vlan30 Gateway" \
+    dst-address=192.168.30.0/24 src-address=192.168.10.0/24
+add action=drop chain=input comment="Block Vlan 20 ACCESS to vlan30 Gateway" \
+    dst-address=192.168.30.0/24 src-address=192.168.20.0/24
+add action=drop chain=forward comment="Block Vlan 30 Access to WWW Webstite" \
+    dst-address=192.168.200.2 src-address=192.168.30.0/24
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=Internet
+/ip route
+add dst-address=0.0.0.0/0 gateway=192.168.1.1
+add dst-address=192.168.200.2/32 gateway=192.168.1.2
+/ip service
+set ssh address=10.10.10.0/28
+set www address=10.10.10.0/28
+set winbox address=10.10.10.0/28
+/system identity
+set name=RA

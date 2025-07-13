@@ -1,0 +1,28 @@
+/interface ethernet
+set [ find default-name=ether1 ] disable-running-check=no
+set [ find default-name=ether2 ] disable-running-check=no
+set [ find default-name=ether3 ] disable-running-check=no
+set [ find default-name=ether4 ] disable-running-check=no
+/interface vlan
+add interface=ether2 name=Internet vlan-id=100
+add interface=ether2 name=Managment vlan-id=90
+/port
+set 0 name=serial0
+set 1 name=serial1
+/ip address
+add address=192.168.1.1/29 interface=Internet network=192.168.1.0
+add address=10.10.10.1/28 interface=Managment network=10.10.10.0
+/ip dhcp-client
+add interface=ether1
+/ip firewall filter
+add action=drop chain=input dst-port=22 in-interface=ether1 protocol=tcp comment="BLOCK SSH FROM OUTSIDE"
+add action=drop chain=input dst-port=80 in-interface=ether1 protocol=tcp comment="BLOCK WWW FROM OUTSIDE"
+add action=drop chain=input dst-port=8291 in-interface=ether1 protocol=tcp comment="BLOCK Winbox FROM OUTSIDE"
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1
+/ip service
+set ssh address=10.10.10.0/28
+set www address=10.10.10.0/28
+set winbox address=10.10.10.0/28
+/system identity
+set name=R1
