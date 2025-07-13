@@ -1,37 +1,67 @@
-# Projekt Sieci Firmowej (Topologia VLAN z Mikrotik)
+# Projekt Sieci Firmowej (Topologia VLAN z MikroTik)
 
-## Opis projektu:
-Projekt przedstawia infrastrukturę sieciową firmy podzieloną na dwa piętra z wykorzystaniem routerów i switchy MikroTik. Topologia zakłada segmentację VLAN, routing statyczny, NAT oraz redundancję na poziomie routerów.
+## Opis projektu
 
-##Cechy projektu:
-- Podział na VLAN-y: 10, 20, 30, 50, 90, 150
+Projekt przedstawia infrastrukturę sieciową firmy, rozłożoną na dwa piętra, z wykorzystaniem routerów i switchy MikroTik. Topologia zakłada segmentację VLAN, routing statyczny, NAT oraz redundancję routerów w celu zapewnienia wysokiej dostępności.
+
+---
+
+## Cechy projektu
+
+- Podział na VLAN-y: **10**, **20**, **30**, **50**, **90**, **100**, **150**
 - Izolacja VLAN-ów z selektywnym routingiem
-- Redundantna para routerów na piętrze A
-- Zarządzanie wyłącznie z VLAN 50
-- NAT z VLAN 50 do VLAN 90
-- Dostęp do serwera WWW z VLAN 10, 20 i 50
+- Redundantna para routerów na piętrze A (VRRP)
+- Zarządzanie wyłącznie z VLAN **50**
+- NAT z VLAN **50** do VLAN **90** (dla sieci zarządzającej)
+- Dostęp do serwera WWW z VLAN-ów **10**, **20** i **50**
 
-##Opis plików:
- - Dokumentacja projektu: Dokumentacja.pdf
- - Pliki konfiguracyjne dla poszczególnego urządzenia: "nazwa_urzadzenia".txt 
- - Topologia: Topology.png
- - Projekt: mikrotik_vlan.unl
+---
 
-##Jak uruchomić projekt:
- # Wymagania:
-    - Maszyna wirtualna z zainstalowanym eve-ng lub pnetlab
-    - Obraz RouterOs Mikrotik v7.19.3 wgrany do folderu /opt/unetlab/addons/qemu/Mikrotik-7 a następnie użycie komendy /opt/unetlab/wrappers/unl_wrapper -a fixpermissions
-    - Obraz serwera WWW z ustawionym statycznym adresem IP (zgodny z adresacją w tabeli)
-    - Dostęp do maszyny przez wirtualny telnet (Adres IP maszyny + port przypisany do węzła; port widoczny po najechaniu na node w GUI)
+## Opis plików
 
- #Uruchomienie:
-    -Plik z .unl należy zaimportować do maszyny eve-ng/pnetlab
-    -Po otworzeniu projektu należy uruchomić wszystkie node
-    -Po zalogowaniu się na każde urządzenie Wklej konfigurację z pliku .txt odpowiadającego danemu urządzeniu 
-    -Na hostach VPC (lub innym systemie operacyjnym):
-   	- Pobierz adres IP komendą: dhcp
-   	- Sprawdź komunikację między VLAN-ami oraz dostęp do serwera WWW 
+| Nazwa pliku                  | Opis                                                   |
+|-----------------------------|--------------------------------------------------------|
+| `Dokumentacja.pdf`          | Szczegółowy opis topologii i konfiguracji              |
+| `nazwa_urzadzenia.txt`      | Plik konfiguracyjny dla danego urządzenia MikroTik     |
+| `Topology.png`              | Graficzny diagram sieci                                |
+| `mikrotik_vlan.unl`         | Plik projektu do zaimportowania w EVE-NG/PNetLab       |
 
+---
 
-Autor Projektu:
-Wojciech Wluka 
+## Jak uruchomić projekt
+
+### Wymagania
+
+- Maszyna wirtualna z zainstalowanym **EVE-NG** lub **PNetLab**
+- Obraz RouterOS MikroTik w wersji **v7.19.3**:
+  - Skopiuj do katalogu:
+    ```
+    /opt/unetlab/addons/qemu/Mikrotik-7
+    ```
+  - Wykonaj polecenie naprawiające uprawnienia:
+    ```
+    /opt/unetlab/wrappers/unl_wrapper -a fixpermissions
+    ```
+- Obraz serwera WWW z ustawionym statycznym adresem IP zgodnym z tabelą VLAN
+- Możliwość połączenia przez **Telnet** (IP maszyny + port widoczny w GUI po najechaniu na node)
+
+---
+
+### Uruchomienie projektu
+
+1. Zaimportuj plik `mikrotik_vlan.unl` do EVE-NG/PNetLab
+2. Otwórz projekt i uruchom wszystkie węzły (nody)
+3. Zaloguj się do każdego urządzenia
+4. Wklej konfigurację z pliku `.txt` przypisanego do danego urządzenia
+5. Na hostach VPC (lub innym systemie operacyjnym):
+    - Pobierz adres IP:
+      ```
+      dhcp
+      ```
+    - Sprawdź komunikację między VLAN-ami i dostęp do serwera WWW
+
+---
+
+## Autor projektu
+
+**Wojciech Wluka**
