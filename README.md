@@ -24,7 +24,7 @@ Projekt przedstawia infrastrukturę sieciową firmy podzieloną na dwa piętra z
     - Obraz serwera WWW z ustawionym statycznym adresem IP (zgodny z adresacją w tabeli)
     - Dostęp do maszyny przez wirtualny telnet (Adres IP maszyny + port przypisany do węzła; port widoczny po najechaniu na node w GUI)
 
-  #Uruchomienie:
+ #Uruchomienie:
     -Plik z .unl należy zaimportować do maszyny eve-ng/pnetlab
     -Po otworzeniu projektu należy uruchomić wszystkie node
     -Po zalogowaniu się na każde urządzenie Wklej konfigurację z pliku .txt odpowiadającego danemu urządzeniu 
