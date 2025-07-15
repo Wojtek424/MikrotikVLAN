@@ -9,7 +9,7 @@ Projekt przedstawia infrastrukturę sieciową firmy, rozłożoną na dwa piętra
 ## Cechy projektu
 
 - Podział na VLAN-y: **10**, **20**, **30**, **50**, **90**, **100**, **150**
-- Izolacja VLAN-ów z selektywnym routingiem
+- Izolacja VLAN-ów 
 - Redundantna para routerów na piętrze A (VRRP)
 - Zarządzanie wyłącznie z VLAN **50**
 - NAT z VLAN **50** do VLAN **90** (dla sieci zarządzającej)
