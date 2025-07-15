@@ -62,6 +62,9 @@ Projekt przedstawia infrastrukturę sieciową firmy, rozłożoną na dwa piętra
 
 ---
 
+##Logowanie do urządzeń
+ - Do testów laboratoryjnych pozostawiono domyślną nazwę użytkownika admin bez hasla
+
 ## Autor projektu
 
 **Wojciech Wluka**
